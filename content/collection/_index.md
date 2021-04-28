@@ -3,10 +3,10 @@ author: Alison Hill
 cascade:
   layout: single-series
   sidebar:
-    author: Alison Hill
+    author: Apéro Base Theme
     description: "Sometimes you want a souped-up series- a bundle of related pages
       \nmeant to be read in sequence. This section is like a blog series, \nminus
-      the blog.\n"
+      the blog.\n(Default text from Apéro base theme)"
     show_author_byline: true
     show_post_date: true
     show_sidebar_adunit: true
