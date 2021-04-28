@@ -1,21 +1,16 @@
 ---
-action_label: Read More &rarr;
-action_link: /about
-action_type: text
-description: Sit down, relax, and get to know Hugo Apéro. Built on top of Blogophonic,
-  we wanted to create a polished Hugo theme with the right features for a true personal
-  website. We set out to create a theme that is a pleasure to learn, and one that
-  helps others get to know you better. It is more than a blog, with flexible custom
-  layouts that help you introduce yourself online.
-image_left: true
+title: "John Goldin"
+subtitle: "My Personal Web Site"
+description: "This is is the entryway to my blog and to some personal projects. The topics have to do with R or travel or whatever else is of interest."
 images:
-- img/revoir.jpg
+  - img/for_site/sitting_figure_for_icon.png
+image_left: false
+text_align_left: true
+show_social_links: true # specify social accounts in site config
 show_action_link: true
-show_social_links: true
-subtitle: A Hugo theme you'll want to hang out with
-text_align_left: false
-title: Hugo Apéro
-type: home
+action_link: /blog
+action_label: "To my blog &rarr;"
+action_type: text # text, button
 ---
 
 ** index doesn't contain a body, just front matter above.
