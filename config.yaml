@@ -1,14 +1,15 @@
 baseURL: /
+# baseURL: "https://johngoldin.com/"
 theme: hugo-apero
 languageCode: en
 title: Can I Blog Too
 author: John Goldin
 copyright: ''
-googleAnalytics: ''
+googleAnalytics: "UA-92008736-2"
 disqusShortname: ''
 metaDataFormat: yaml
 footnoteReturnLinkContents: '&#8617;'
-paginate: 5
+paginate: 8
 preserveTaxonomyNames: yes
 ignoreFiles:
   - \.Rmd$
@@ -34,16 +35,16 @@ params:
   customheadingFontFamily: Fraunces
   customtextFontFamily: Commissioner
   description: A modern, beautiful, and easily configurable blog theme for Hugo.
-  favicon: /img/favicon.ico
+  favicon: /img/for_site/gargoyle.iconset
   headingFontFamily: sans-serif
-  logo: /img/blogophonic-mark-dark.png
+  logo: /img/for_site/gargoyle_transparent.png
   mainSections:
     - blog
     - project
-    - talk
+#    - talk
   navallcaps: yes
-  orgLocal: Anywhere
-  orgName: RStudio
+  orgLocal: "Guilford, CT  USA"
+  orgName:
   sharing_image: /img/papillons.jpg
   social:
     - icon: github
@@ -61,8 +62,8 @@ params:
   socialInFooter: yes
   socialInHeader: no
   textFontFamily: sans-serif
-  theme: sky
-  twitter: apreshill
+  theme: plum
+  twitter: johngoldin
   utterances:
     issue_term: pathname
     label: 'comments :crystal_ball:'
@@ -83,13 +84,13 @@ menu:
       title: Contact form
       url: /contact/
       weight: 2
-    - name: Contributors
-      title: Contributors
-      url: /contributors/
-      weight: 3
+#    - name: Contributors
+#      title: Contributors
+#      url: /contributors/
+#      weight: 3
   header:
     - name: About
-      title: About Blogophonic
+      title: John Goldin
       url: /about/
       weight: 1
     - name: Blog
@@ -100,10 +101,10 @@ menu:
       title: Project Portfolio
       url: /project/
       weight: 3
-    - name: Talks
-      title: Talks
-      url: /talk/
-      weight: 4
+#    - name: Talks
+#      title: Talks
+#      url: /talk/
+#      weight: 4
     - name: A collection
       title: A collection
       url: /collection/
