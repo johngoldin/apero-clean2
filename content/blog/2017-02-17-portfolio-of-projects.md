@@ -2,6 +2,7 @@
 title: Portfolio of Projects
 date: '2017-02-17'
 slug: "portfolio"
+excerpt: 'A list of projects, last revised in 2019.'
 aliases:
     - /2017/02/portfolio/
 categories:

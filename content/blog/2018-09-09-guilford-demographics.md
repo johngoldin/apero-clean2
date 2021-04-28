@@ -11,7 +11,7 @@ categories:
 tags:
   - census
   - Guilford
-description: 'A description of the demographic structure of Guilford by age compared with other towns. Also provides some background on the geographic location of registered voters in Guilford. This post is very similar to the previous post; it does not include the R code so it is much more readable.'  
+excerpt: 'A description of the demographic structure of Guilford by age compared with other towns. Also provides some background on the geographic location of registered voters in Guilford. This post is very similar to the previous post; it does not include the R code so it is much more readable.'  
 keywords: []
 ---
 

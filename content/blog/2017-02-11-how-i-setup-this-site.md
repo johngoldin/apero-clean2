@@ -9,7 +9,7 @@ aliases:
 Categories:
   - blogdown
   - GitHub
-Description: ''
+excerpt: 'An outdated description of how I set up an earlier version of this site.'
 Tags:
   - blogdown
   - GitHub
