@@ -7,6 +7,7 @@ aliases:
 excerpt: 'Tips on country walking in Britain from the point of view of an American. The first of three parts.'
 categories:
   - British Walking
+weight: 1
 ---
 
 Since retiring in 2011, I have been on a binge of walking in the UK. I will try to offer some tips based on lessons I have learned.

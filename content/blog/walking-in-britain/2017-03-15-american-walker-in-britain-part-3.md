@@ -9,6 +9,7 @@ categories:
   - British Walking
 tags: []
 excerpt: 'Tips on country walking in Britain from the point of view of an American. The third of three parts.'
+weight: 3
 keywords: []
 ---
 
