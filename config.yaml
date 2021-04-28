@@ -49,24 +49,15 @@ params:
     - icon: github
       icon_pack: fab
       url: https://github.com/apreshill/apero
-    - icon: facebook-square
-      icon_pack: fab
-      url: https://www.facebook.com/hashtag/ap%C3%A9ro
-    - icon: instagram
-      icon_pack: fab
-      url: https://www.instagram.com/explore/tags/apero/
     - icon: twitter
       icon_pack: fab
-      url: https://twitter.com/hashtag/apéro
-    - icon: impactstory
-      icon_pack: ai
-      url: https://impactstory.org/u/0000-0002-8082-1890
-    - icon: orcid
-      icon_pack: ai
-      url: http://orcid.org/0000-0002-8082-1890
+      url: https://twitter.com/johngoldin
     - icon: rss
       icon_pack: fas
       url: /blog/index.xml
+    - icon: flickr
+      icon_pack: fab
+      url: https://www.flickr.com/people/99418994@N00/
   socialInFooter: yes
   socialInHeader: no
   textFontFamily: sans-serif
@@ -75,7 +66,7 @@ params:
   utterances:
     issue_term: pathname
     label: 'comments :crystal_ball:'
-    repo_name: apreshill/apero
+    repo_name: johngoldin/can_i_blog_too
     theme: boxy-light
     use_utterances: yes
 taxonomies:
