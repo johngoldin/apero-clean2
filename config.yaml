@@ -1,8 +1,8 @@
-baseURL: /
+baseURL: https://johngoldin.com/
 theme: hugo-apero
 languageCode: en
-title: Hugo Apéro
-author: Alison Hill
+title: Can I Blog Too
+author: John Goldin
 copyright: ''
 googleAnalytics: ''
 disqusShortname: ''
