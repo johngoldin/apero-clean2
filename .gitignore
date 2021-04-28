@@ -3,3 +3,17 @@
 .Rdata
 .httr-oauth
 .DS_Store
+
+# knitr and R markdown default cache directories
+/*_cache/
+/cache/
+
+# check_site suggestion:
+Thumbs.db
+
+# check_site suggested because netlify
+/public/
+/resources/
+
+# my temporary files
+temp.*
