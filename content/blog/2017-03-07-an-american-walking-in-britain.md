@@ -4,7 +4,7 @@ date: '2017-03-07'
 slug: "am-walker-1"
 aliases:
     - /2017/03/am_walker_1/
-exceerpt: 'Tips on country walking in Britain from the point of view of an American. The first of three parts.'
+excerpt: 'Tips on country walking in Britain from the point of view of an American. The first of three parts.'
 categories:
   - British Walking
 ---
