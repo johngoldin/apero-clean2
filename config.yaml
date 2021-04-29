@@ -32,11 +32,16 @@ markup:
     startLevel: 2
 params:
   custom_theme: ''
-  customheadingFontFamily: Fraunces
-  customtextFontFamily: Commissioner
+  # customheadingFontFamily: Fraunces
+  # customtextFontFamily: Commissioner
+  customtextFontFamily: ""
+  customheadingFontFamily: ""
+  # alternatively, leave empty and select basic font options: sans-serif or serif
+  # for more http://tachyons.io/docs/typography/font-family/
+  textFontFamily: "Calisto"
+  headingFontFamily: "Avenir"
   description: A modern, beautiful, and easily configurable blog theme for Hugo.
   favicon: /img/for_site/gargoyle.iconset
-  headingFontFamily: sans-serif
   logo: /img/for_site/gargoyle_transparent.png
   mainSections:
     - blog
@@ -61,7 +66,6 @@ params:
       url: https://www.flickr.com/people/99418994@N00/
   socialInFooter: yes
   socialInHeader: no
-  textFontFamily: sans-serif
   theme: plum
   twitter: johngoldin
   utterances:

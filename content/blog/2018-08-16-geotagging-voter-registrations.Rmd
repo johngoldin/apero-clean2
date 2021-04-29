@@ -263,7 +263,7 @@ Here is the code that converts the text date of birth into a value for
 age and that does some other recoding.
 
 ```{r fix_age}
-library(lubridate)
+library(lubridate) 
 # https://stackoverflow.com/questions/31126726/efficient-and-accurate-age-calculation-in-years-months-or-weeks-in-r-given-b
 compute_age <- function(from, to) {
   from_lt = as.POSIXlt(from)
@@ -338,12 +338,16 @@ Next we will retrieve US Census data to do the same thing for the total populati
 ```{r census_pop_pyramid, cache = TRUE}
 library(tidycensus)
 census_age_sex <- function(census_year = 2010, towns = c("Guilford")) {
-browser()
-  dec2010 <- load_variables(2010, "sf1", cache = TRUE)
-  vars <- dec2010$name[985:1031]
+  decvars <- load_variables(census_year, "sf1", cache = TRUE)
+  # if (census_year == 2000) concept_label <- "SEX BY AGE \\[49\\]"
+  # else concept_label <- "SEX BY AGE"
+  first_var <- which(decvars$name == "P012003")
+  last_var <- which(decvars$name == "P012049")
+  vars <- decvars$name[first_var:last_var]
   # dec2010$label[985:1031]
   # we need to weed out the Total Female variabe
-  vars <- vars[vars != first(dec2010$name[dec2010$label == "Total!!Female"])]
+  vars <- vars[vars != "P012026"]
+  # vars <- vars[vars != first(dec2010$name[dec2010$label == "Total!!Female"])]
 #  [1] "P011002" "P011003" "P011004" "P011005" "P011006" "P011007" "P011008"
 #  [8] "P011009" "P011010" "P011011" "P011012" "P011013" "P011014" "P011015"
 # [15] "P011016" "P011017" "P011018" "P011019" "P011020" "P011021" "P011022"
@@ -357,13 +361,13 @@ browser()
                              summary_var = "P012001",
                                 geography = "county subdivision", 
                                 county = "New Haven",
-                             sumfile = "SF1",
+                             # sumfile = "SF3",
                                 state = "CT", cache = TRUE, year = census_year)
 # Note the interesting filter using map_lgl to take advantage of passing vector to str_detect
 # Filter can also be written as: filter(map_lgl(NAME, ~ any(str_detect(., towns)))) 
   guilford_age <- age_x_sex %>% 
     filter(map_lgl(NAME, function(x) {any(str_detect(x, towns))})) %>%
-    left_join(dec2010, by = c("variable" = "name")) %>% 
+    left_join(decvars, by = c("variable" = "name")) %>% 
     arrange(NAME, variable)
 # format and coding based on https://walkerke.github.io/2017/10/geofaceted-pyramids/  
   
