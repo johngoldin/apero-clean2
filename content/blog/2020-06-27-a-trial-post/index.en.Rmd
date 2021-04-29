@@ -10,8 +10,8 @@ categories:
   - GPS
 tags:
   - maps
-type: post
 subtitle: ''
+draft: no
 image: ''
 # draft: no
 output:
