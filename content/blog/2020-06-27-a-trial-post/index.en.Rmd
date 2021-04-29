@@ -13,7 +13,6 @@ tags:
 type: post
 subtitle: ''
 image: ''
-draft: no
 output:
   blogdown::html_page:
     toc: no
