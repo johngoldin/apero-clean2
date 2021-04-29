@@ -10,7 +10,7 @@ excerpt: 'Just a test post'
 images: ~
 series: ~
 layout: single
-draft: yes
+draft: no
 ---
 
 This is just a test post to see whether a new post actually appears.
