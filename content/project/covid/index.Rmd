@@ -6,7 +6,7 @@ categories:
   - COVID19
 tags:
   - COVID19
-subtitle: "Summary of Daily Connecticut Report"
+subtitle: "Daily Summary of Connecticut Data"
 slug: covid-19-in-Connecticut-2
 aliases:
     - /2020/06/covid-19-in-connecticut/
@@ -116,6 +116,9 @@ covid_estim <- read_csv("https://covidestim.s3.us-east-2.amazonaws.com/latest/st
 #          recent_rt = last(mean)) %>% 
 #   ungroup() 
 ```
+
+I have been publishing this in a blog post from June 2020. Each weekday I would update that post with the data from Connecticut state sources.
+The blog format never made sense for doing a frequent update of that type of data. I plan to move it to this item in *Projects*. The original post remains. I plan to redirect the old URL for that blog post so that it leads to this project page.
 
 ## Latest Connecticut Data from the Department of Public Health
 
