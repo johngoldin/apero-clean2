@@ -632,7 +632,7 @@ from the <code>sf</code> objects that contain the shapefiles for tracts and town
   labs(title = &quot;New Haven Area Towns&quot;, 
        subtitle = &quot;with census tract boundaries&quot;,
        caption = &quot;Source: US Census, tidycensus package&quot;)  </code></pre>
-<p><img src="/blog/2019-04-11-working-with-new-haven-area-census-data-using-r_files/figure-html/base_plot-1.png" width="100%" /></p>
+<p><img src="/blog/untitled folder/2019-04-11-working-with-new-haven-area-census-data-using-r_files/figure-html/base_plot-1.png" width="100%" /></p>
 </div>
 <div id="we-have-a-map-lets-display-some-census-data" class="section level3">
 <h3>We Have a Map; Let’s Display Some Census Data</h3>
@@ -668,7 +668,7 @@ ggplot() +
   labs(title = &quot;Percentage of Families Below the Poverty Line&quot;, 
        subtitle = &quot;by census tract (margin of error by tract may be large)&quot;,
        caption = &quot;Source: US Census American Community Survey 2013-2017 (variable B17010_002)\ntidycensus R package&quot;)  </code></pre>
-<p><img src="/blog/2019-04-11-working-with-new-haven-area-census-data-using-r_files/figure-html/poverty_plot-1.png" width="110%" /></p>
+<p><img src="/blog/untitled folder/2019-04-11-working-with-new-haven-area-census-data-using-r_files/figure-html/poverty_plot-1.png" width="110%" /></p>
 <p>In the map that shows poverty by census tract, there are six tracts that are
 missing from the data. They show up as white areas on the map. Presumably data
 has been suppressed. One of the missing tracts is where I used to live in New
@@ -699,7 +699,7 @@ ggplot() +
   labs(title = &quot;Median Household Income (Log Scale)&quot;, 
        subtitle = &quot;by census tract (margin of error by tract may be large)&quot;,
        caption = &quot;Source: US Census American Community Survey 2013-2017 (variable B19013_001)\ntidycensus R package&quot;)  </code></pre>
-<p><img src="/blog/2019-04-11-working-with-new-haven-area-census-data-using-r_files/figure-html/income_plot-1.png" width="100%" /></p>
+<p><img src="/blog/untitled folder/2019-04-11-working-with-new-haven-area-census-data-using-r_files/figure-html/income_plot-1.png" width="100%" /></p>
 <p>Because the ACS is based on a sample, one cannot ignore the margin of error. The
 next plot has shows the median income for each census tract within each town drawn
 with a line that represents minus and plus the margin error. In effect this shows
@@ -724,7 +724,7 @@ ggplot(data = income_tracts, aes(x = estimate/1000, y = fct_reorder(tract_name, 
        caption = &quot;Source: US Census American Community Survey 2013-2017 (variable B19013_001)\ntidycensus R package&quot;) +
   scale_x_log10(name = &quot;Income (000&#39;s)&quot;, breaks = c(20, 30, 50, 100, 150)) +
   theme(axis.text.x  = element_text(size=6), axis.text.y  = element_text(size=5))</code></pre>
-<p><img src="/blog/2019-04-11-working-with-new-haven-area-census-data-using-r_files/figure-html/show_moe-1.png" width="100%" /></p>
+<p><img src="/blog/untitled folder/2019-04-11-working-with-new-haven-area-census-data-using-r_files/figure-html/show_moe-1.png" width="100%" /></p>
 </div>
 <div id="now-for-something-completely-different" class="section level3">
 <h3>Now for Something Completely Different</h3>
@@ -1600,7 +1600,7 @@ towns are very, very white.</p>
   labs(title = &quot;Percentage of Population for a Set of Sub-Groups&quot;, 
        # subtitle = &quot;by census tract (margin of error by tract may be large)&quot;,
        caption = &quot;Source: US Census American Community Survey 2013-2017 (variables B01001H_001, B02008_001, B02009_001, B02011_001, B01001I_001, B05001_006)\ntidycensus R package&quot;)  </code></pre>
-<p><img src="/blog/2019-04-11-working-with-new-haven-area-census-data-using-r_files/figure-html/race_by_town-1.png" width="100%" /></p>
+<p><img src="/blog/untitled folder/2019-04-11-working-with-new-haven-area-census-data-using-r_files/figure-html/race_by_town-1.png" width="100%" /></p>
 <p>As an experiment, I redid the race plot to show detail by census tract not just
 by town. Of course the overall impression is similar to the town level plots. As
 I have said before, as one gets down to the level of individual tracts the
@@ -1639,7 +1639,7 @@ ggplot() +
   labs(title = &quot;Percentage of Population for a Set of Sub-Groups&quot;, 
        subtitle = &quot;by census tract (margin of error by tract may be large)&quot;,
        caption = &quot;Source: US Census American Community Survey 2013-2017\n(variables B01001H_001, B02008_001, B02009_001, B02011_001, B01001I_001, B05001_006)\ntidycensus R package&quot;)  </code></pre>
-<p><img src="/blog/2019-04-11-working-with-new-haven-area-census-data-using-r_files/figure-html/race_by_tract-1.png" width="100%" /></p>
+<p><img src="/blog/untitled folder/2019-04-11-working-with-new-haven-area-census-data-using-r_files/figure-html/race_by_tract-1.png" width="100%" /></p>
 <p>As a final step I focused only on the City of New Haven. By focusing on one
 town only, we can see more detail by census tract. Within the city, some
 tracts are very white and others are very non-white. The east side of the city
@@ -1673,7 +1673,7 @@ ggplot() +
   labs(title = &quot;Focus on New Haven: Percentage of Population for a Set of Sub-Groups&quot;, 
        subtitle = &quot;by census tract (margin of error by tract may be large)&quot;,
        caption = &quot;Source: US Census American Community Survey 2013-2017\n(variables B01001H_001, B02008_001, B02009_001, B02011_001, B01001I_001, B05001_006)\ntidycensus R package&quot;)  </code></pre>
-<p><img src="/blog/2019-04-11-working-with-new-haven-area-census-data-using-r_files/figure-html/focus_on_newhaven-1.png" width="100%" /></p>
+<p><img src="/blog/untitled folder/2019-04-11-working-with-new-haven-area-census-data-using-r_files/figure-html/focus_on_newhaven-1.png" width="100%" /></p>
 </div>
 <div id="conclusion" class="section level3">
 <h3>Conclusion</h3>
