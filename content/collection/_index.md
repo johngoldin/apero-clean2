@@ -12,7 +12,7 @@ cascade:
     text_link_label: ""
     text_link_url: ""
     text_series_label: Outline
-    title: Create a Collection
+    title: A Collection
 description: "Where does this information show?"
 layout: list-sidebar
 show_author_byline: false
