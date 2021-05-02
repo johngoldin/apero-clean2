@@ -29,7 +29,7 @@ data_folder <- "~/Dropbox/Programming/R_Stuff/ct_voters/"
 ```
 
 **Attention conservation notice:** Unless you are interested in R-related detail, skip this post and
-read the [next post](/post/guilford-demographics/) instead.
+read the [next post](/blog/guilford-demographics/) instead.
 
 ### The Data Source
 

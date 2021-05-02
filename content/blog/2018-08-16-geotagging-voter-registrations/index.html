@@ -5,11 +5,11 @@ date: '2018-09-08'
 slug: geotagging-voters
 aliases:
     - /2018/09/geotagging_voters/
-categories: 
+categories:
   - R
   - maps
   - census
-tags: 
+tags:
   - R
   - Guilford
   - maps
@@ -22,7 +22,7 @@ keywords: []
 
 
 <p><strong>Attention conservation notice:</strong> Unless you are interested in R-related detail, skip this post and
-read the <a href="/post/guilford-demographics/">next post</a> instead.</p>
+read the <a href="/blog/guilford-demographics/">next post</a> instead.</p>
 <div id="the-data-source" class="section level3">
 <h3>The Data Source</h3>
 <p>It’s primary season and recently I learned about a somewhat strange
@@ -106,7 +106,7 @@ EXT2 &lt;- read_csv(&quot;downloaded_files/SSP-2/ELCT/VOTER/EXT2&quot;,
     col_names = FALSE, col_types = fix_cols) %&gt;%
     filter(X1 == &quot;060&quot;)
 EXT2 &lt;- EXT2 %&gt;% arrange(X23, X21, X3)
-# 
+#
 # fl &lt;- read_lines(&quot;downloaded_files/SSP-2/ELCT/VOTER/EXT2&quot;)
 construct_names &lt;- c(paste0(&quot;elect&quot;, seq(1:20)),
 paste0(&quot;elect_type&quot;, seq(1:20)),
@@ -120,16 +120,16 @@ alayout &lt;- read_table2(&quot;downloaded_files/alayout.txt&quot;, col_names = 
 # next apply names from layout plus constructed names at the end of the record
 names(EXT2) &lt;- c(str_replace(alayout$X3, &quot;ws_&quot;, &quot;&quot;)[1:43], construct_names, &quot;mystery&quot;)
 
-guilford_only &lt;- EXT2 %&gt;% filter(town_id == &quot;060&quot;) %&gt;% 
+guilford_only &lt;- EXT2 %&gt;% filter(town_id == &quot;060&quot;) %&gt;%
   mutate(first_name = str_trim(paste(vtr_nm_first, vtr_nm_mid)),
-         addresses = paste0(paste(vtr_ad_num, nm_street), 
-                            ifelse(is.na(vtr_ad_unit), &quot;&quot;, paste(&quot; Unit&quot;, vtr_ad_unit)), 
+         addresses = paste0(paste(vtr_ad_num, nm_street),
+                            ifelse(is.na(vtr_ad_unit), &quot;&quot;, paste(&quot; Unit&quot;, vtr_ad_unit)),
                  &quot;, Guilford, CT&quot;)) </code></pre>
 <pre class="r"><code>load(paste0(data_folder, &quot;regs from full dataset.RData&quot;))
-regs &lt;- regs %&gt;% filter(status == &quot;Active&quot;) 
+regs &lt;- regs %&gt;% filter(status == &quot;Active&quot;)
   regs %&gt;%
-  group_by(party) %&gt;% 
-  tally() %&gt;% arrange(desc(n)) %&gt;% 
+  group_by(party) %&gt;%
+  tally() %&gt;% arrange(desc(n)) %&gt;%
   mutate(pct =paste0(round(100 * n / nrow(regs), 0),&#39;%&#39;)) %&gt;%
   bind_rows(regs  %&gt;% tally() %&gt;% mutate(party = &quot;Total&quot;, pct = &quot;100%&quot;)) %&gt;%
 kable(col.names = c(&quot;Party&quot;, &quot;n&quot;, &quot;%&quot;), format = &quot;html&quot;, align = c(&quot;l&quot;, &quot;r&quot;, &quot;r&quot;),
@@ -238,13 +238,13 @@ For the US it uses a social security database of name and gender by birth year. 
 name it gives a probability of male or female.</p>
 <pre class="r"><code># I clean up the first_name data to eliminate initials and then pick first word
 # Also interprets hyphenated first name: Mary-Beth picks out Mary
-regs_fn &lt;- regs %&gt;% 
+regs_fn &lt;- regs %&gt;%
   mutate(dob = mdy(dt_birth), yob = year(dob),
          fn = map2_chr(str_split(
-           str_replace(first_name, &quot;^.\\.* &quot;, &quot;&quot;), &quot;[ -]&quot;), 1, first)) 
-# could try to use year of birth to refine gender guess, 
+           str_replace(first_name, &quot;^.\\.* &quot;, &quot;&quot;), &quot;[ -]&quot;), 1, first))
+# could try to use year of birth to refine gender guess,
 # but decided it wasn&#39;t worth pursuing
-fn_year &lt;- regs_fn %&gt;% select(fn, yob) %&gt;% 
+fn_year &lt;- regs_fn %&gt;% select(fn, yob) %&gt;%
   mutate(yob = (yob %/% 5) * 5) %&gt;%
   unique()
 all_fn &lt;- unique(fn_year$fn)
@@ -341,12 +341,12 @@ kable(iffy_gender %&gt;% select(`first name` = name, `proportion male` = proport
 stats supplied by the gender package. You can’t get more bi-modal than this.
 The gender guesses are not 100% accurate, but most are quite unambiguous.</p>
 <pre class="r"><code>name_found &lt;- left_join(regs_fn, simple_gender, by = c(&quot;fn&quot; = &quot;name&quot;)) %&gt;% filter(!is.na(proportion_male))
-for_subtitle &lt;- paste(sprintf(&quot;(The `gender` package found an entry  in the gender database for %4.1f%%&quot;, 
-                              (nrow(name_found) / nrow(regs_fn)) * 100), 
+for_subtitle &lt;- paste(sprintf(&quot;(The `gender` package found an entry  in the gender database for %4.1f%%&quot;,
+                              (nrow(name_found) / nrow(regs_fn)) * 100),
                       &quot;of the first names.)&quot;)
-ggplot(data = name_found, aes(x = proportion_male)) + 
+ggplot(data = name_found, aes(x = proportion_male)) +
   geom_histogram() + scale_x_continuous(labels = scales::percent) +
-  labs(title = &quot;Estimate of Gender Based on First Name&quot;, 
+  labs(title = &quot;Estimate of Gender Based on First Name&quot;,
        subtitle = for_subtitle)</code></pre>
 <p><img src="/blog/2018-08-16-geotagging-voter-registrations_files/figure-html/gender_guess-1.png" width="672" /></p>
 <p>Of the small number of first names that were not found by the <code>gender</code> package, I would
@@ -355,41 +355,41 @@ guess that more than 90% are non-European or at least non-English-speaking names
 by party and gender. Women are less likely to be unaffiliated and more likely to be
 Democrats than are men.</p>
 <pre class="r"><code># gosh, it takes a lot of fooling around to produce a straightforward table
-regs_fn &lt;- regs_fn %&gt;% 
+regs_fn &lt;- regs_fn %&gt;%
   left_join(simple_gender %&gt;% select(fn = name, sex = gender_guess))</code></pre>
 <pre><code>## Joining, by = &quot;fn&quot;</code></pre>
 <pre class="r"><code>miss_codes &lt;- regs_fn %&gt;% filter((sex == &quot;Female&quot; &amp; (vtr_sex == &quot;M&quot;)) |
                                    ((sex == &quot;Male&quot;) &amp; (vtr_sex == &quot;F&quot;)))
 # % of cases where vtr_sex is present where vtr_sex is different than guess of sex
-# note that sprintf format %3.1f rounds. 
-rate_of_misscodes &lt;- sprintf(&quot;%3.1f%%&quot;, 
-                             (nrow(miss_codes) / 
+# note that sprintf format %3.1f rounds.
+rate_of_misscodes &lt;- sprintf(&quot;%3.1f%%&quot;,
+                             (nrow(miss_codes) /
                                 nrow(regs_fn %&gt;% filter(vtr_sex != &quot;U&quot;, !is.na(sex)))) * 100)
 regs_fn &lt;- regs_fn %&gt;% mutate(sex = ifelse(vtr_sex == &quot;M&quot;, &quot;Male&quot;,
-                                           ifelse(vtr_sex == &quot;F&quot;, &quot;Female&quot;, 
+                                           ifelse(vtr_sex == &quot;F&quot;, &quot;Female&quot;,
                                                   ifelse(is.na(sex), &quot;Unknown&quot;, sex))))
-by_party &lt;- regs_fn %&gt;% 
+by_party &lt;- regs_fn %&gt;%
   mutate(Party = factor(case_when(
            party %in% c(&quot;Democratic&quot;, &quot;Republican&quot;, &quot;Unaffiliated&quot;) ~ party,
            TRUE ~ &quot;Other&quot;
-         ), levels = c(&quot;Democratic&quot;, &quot;Republican&quot;, &quot;Unaffiliated&quot;, 
+         ), levels = c(&quot;Democratic&quot;, &quot;Republican&quot;, &quot;Unaffiliated&quot;,
                        &quot;Other&quot;, &quot;Total&quot;))) %&gt;%
   group_by(Party) %&gt;%
-  summarise(Men = sum(sex == &quot;Male&quot;), Women = sum(sex == &quot;Female&quot;), 
+  summarise(Men = sum(sex == &quot;Male&quot;), Women = sum(sex == &quot;Female&quot;),
             Unknown = sum(sex == &quot;Unknown&quot;),
             Count = n())
 
 totals = by_party %&gt;%
-  summarise(Party = factor(&quot;Total&quot;, levels = c(&quot;Democratic&quot;, &quot;Republican&quot;, 
-                                               &quot;Unaffiliated&quot;, &quot;Other&quot;, &quot;Total&quot;)), 
-            Men = sum(Men), Women = sum(Women), 
+  summarise(Party = factor(&quot;Total&quot;, levels = c(&quot;Democratic&quot;, &quot;Republican&quot;,
+                                               &quot;Unaffiliated&quot;, &quot;Other&quot;, &quot;Total&quot;)),
+            Men = sum(Men), Women = sum(Women),
             Unknown = sum(Unknown), Count = sum(Count))
 by_party &lt;- bind_rows(by_party, totals) %&gt;%
-  mutate(`% Women` = sprintf(&quot;  %4.f%%  &quot;, 
+  mutate(`% Women` = sprintf(&quot;  %4.f%%  &quot;,
                              round((Women / (Count - Unknown)) * 100, 1)),
-         `% of Total` = sprintf(&quot;  %4.f%%  &quot;, 
+         `% of Total` = sprintf(&quot;  %4.f%%  &quot;,
                                 round((Count / totals$Count) * 100, 1)))
-kable(by_party, align = c(&quot;l&quot;, &quot;r&quot;, &quot;r&quot;, &quot;r&quot;, &quot;r&quot;, &quot;c&quot;, &quot;c&quot;), 
+kable(by_party, align = c(&quot;l&quot;, &quot;r&quot;, &quot;r&quot;, &quot;r&quot;, &quot;r&quot;, &quot;c&quot;, &quot;c&quot;),
       format.args = list(big.mark = &quot;,&quot;, width = 6, justify = &quot;r&quot;))</code></pre>
 <table>
 <thead>
@@ -461,41 +461,41 @@ who are under 18. I was surprised to learn that in Connecticut a 17 year old can
 primary if they will turn 18 by the time of the general election.</p>
 <p>Here is the code that converts the text date of birth into a value for
 age and that does some other recoding.</p>
-<pre class="r"><code>library(lubridate) 
+<pre class="r"><code>library(lubridate)
 # https://stackoverflow.com/questions/31126726/efficient-and-accurate-age-calculation-in-years-months-or-weeks-in-r-given-b
 compute_age &lt;- function(from, to) {
   from_lt = as.POSIXlt(from)
   to_lt = as.POSIXlt(to)
-  
+
   age = to_lt$year - from_lt$year
-  
+
   ifelse(to_lt$mon &lt; from_lt$mon |
            (to_lt$mon == from_lt$mon &amp; to_lt$mday &lt; from_lt$mday),
          age - 1, age)
 }
 # create named vector to use with str_replace that will find name and replace with value.
 # Full dataset has age as mm/dd/yyyy so I didn&#39;t need this code.
-# fnd &lt;- c(&quot;born: &quot;, &quot; January &quot;, &quot; February &quot;, &quot; March &quot;, &quot; April &quot;, 
-#                                  &quot; May &quot;, &quot; June &quot;, &quot; July &quot;, &quot; August &quot;, 
+# fnd &lt;- c(&quot;born: &quot;, &quot; January &quot;, &quot; February &quot;, &quot; March &quot;, &quot; April &quot;,
+#                                  &quot; May &quot;, &quot; June &quot;, &quot; July &quot;, &quot; August &quot;,
 #                                  &quot; September &quot;, &quot; October &quot;, &quot; November &quot;, &quot; December &quot;)
-# repl &lt;- c(&quot;&quot;, &quot;-01-&quot;, &quot;-02-&quot;, &quot;-03-&quot;, &quot;-04-&quot;, 
-#                                  &quot;-05-&quot;, &quot;-06-&quot;, &quot;-07-&quot;, &quot;-08-&quot;, 
+# repl &lt;- c(&quot;&quot;, &quot;-01-&quot;, &quot;-02-&quot;, &quot;-03-&quot;, &quot;-04-&quot;,
+#                                  &quot;-05-&quot;, &quot;-06-&quot;, &quot;-07-&quot;, &quot;-08-&quot;,
 #                                  &quot;-09-&quot;, &quot;-10-&quot;, &quot;-11-&quot;, &quot;-12-&quot;)
 # names(repl) &lt;- fnd # repl will be used in str_replace_all
 regs_age &lt;- regs_fn %&gt;%
-  left_join(simple_gender, by = c(&quot;fn&quot; = &quot;name&quot;)) %&gt;% 
-  mutate(sex = ifelse(is.na(proportion_male), &quot;Unknown&quot;, 
+  left_join(simple_gender, by = c(&quot;fn&quot; = &quot;name&quot;)) %&gt;%
+  mutate(sex = ifelse(is.na(proportion_male), &quot;Unknown&quot;,
                       ifelse(proportion_male &gt; 0.5, &quot;Male&quot;, &quot;Female&quot;)),
          Party = factor(case_when(
            party %in% c(&quot;Democratic&quot;, &quot;Republican&quot;, &quot;Unaffiliated&quot;) ~ party,
            TRUE ~ &quot;Other&quot;
-         ), levels = c(&quot;Democratic&quot;, &quot;Republican&quot;, &quot;Unaffiliated&quot;, 
+         ), levels = c(&quot;Democratic&quot;, &quot;Republican&quot;, &quot;Unaffiliated&quot;,
                        &quot;Other&quot;, &quot;Total&quot;)),
          age = compute_age(dob, ymd(&quot;2017-11-03&quot;)),
          age = ifelse(age &gt; 105, NA_real_, age),
          # create Age groups:
          Age = paste0((age %/% 5) * 5,&quot;-&quot;,(age %/% 5) * 5 + 4)) %&gt;%
-  select(first_name, last_name, yob, age, Age, sex, Party, addresses, 
+  select(first_name, last_name, yob, age, Age, sex, Party, addresses,
          vtr_sex, poll_place)</code></pre>
 <div id="reg_pyramid" class="section level4">
 <h4>Population Pyramid of Voter Registrations</h4>
@@ -503,9 +503,9 @@ regs_age &lt;- regs_fn %&gt;%
 <pre class="r"><code>for_pop_pyramid &lt;- regs_age %&gt;% filter(sex != &quot;Unknown&quot;, !is.na(age), age &lt; 105, Party != &quot;Other&quot;) %&gt;%
   mutate( Age = if_else(age &gt;= 90, &quot;90+&quot;, Age)) %&gt;%
   arrange(age) %&gt;% mutate(Age = fct_inorder(factor(Age)))
-party_pyramid &lt;- ggplot(data = for_pop_pyramid, 
-       aes(x = Age, fill = sex)) + 
-  geom_bar(data = subset(for_pop_pyramid, sex == &quot;Female&quot;), width = 1) + 
+party_pyramid &lt;- ggplot(data = for_pop_pyramid,
+       aes(x = Age, fill = sex)) +
+  geom_bar(data = subset(for_pop_pyramid, sex == &quot;Female&quot;), width = 1) +
   geom_bar(data = subset(for_pop_pyramid, sex == &quot;Male&quot;), , width = 1,
            mapping = aes(y = - ..count.. ),
            position = &quot;identity&quot;) +
@@ -541,28 +541,28 @@ census_age_sex &lt;- function(census_year = 2010, towns = c(&quot;Guilford&quot;
 # [22] &quot;P011023&quot; &quot;P011024&quot; &quot;P011025&quot; &quot;P011026&quot; &quot;P011027&quot; &quot;P011028&quot; &quot;P011029&quot;
 # [29] &quot;P011030&quot; &quot;P011031&quot; &quot;P011032&quot; &quot;P011033&quot; &quot;P011034&quot; &quot;P011035&quot; &quot;P011036&quot;
 # [36] &quot;P011037&quot; &quot;P011038&quot; &quot;P011039&quot; &quot;P011040&quot; &quot;P011041&quot; &quot;P011042&quot; &quot;P011043&quot;
-# [43] &quot;P011044&quot; &quot;P011045&quot; &quot;P011046&quot; &quot;P011047&quot; &quot;P011048&quot;  
+# [43] &quot;P011044&quot; &quot;P011045&quot; &quot;P011046&quot; &quot;P011047&quot; &quot;P011048&quot;
   # get my key for the census API
   source(&quot;~/Dropbox/Programming/R_Stuff/my_census_api_key.R&quot;)
   age_x_sex &lt;- get_decennial(variables = vars, # table = &quot;P12&quot;,
                              summary_var = &quot;P012001&quot;,
-                                geography = &quot;county subdivision&quot;, 
+                                geography = &quot;county subdivision&quot;,
                                 county = &quot;New Haven&quot;,
                              # sumfile = &quot;SF3&quot;,
                                 state = &quot;CT&quot;, cache = TRUE, year = census_year)
 # Note the interesting filter using map_lgl to take advantage of passing vector to str_detect
-# Filter can also be written as: filter(map_lgl(NAME, ~ any(str_detect(., towns)))) 
-  guilford_age &lt;- age_x_sex %&gt;% 
+# Filter can also be written as: filter(map_lgl(NAME, ~ any(str_detect(., towns))))
+  guilford_age &lt;- age_x_sex %&gt;%
     filter(map_lgl(NAME, function(x) {any(str_detect(x, towns))})) %&gt;%
-    left_join(decvars, by = c(&quot;variable&quot; = &quot;name&quot;)) %&gt;% 
+    left_join(decvars, by = c(&quot;variable&quot; = &quot;name&quot;)) %&gt;%
     arrange(NAME, variable)
-# format and coding based on https://walkerke.github.io/2017/10/geofaceted-pyramids/  
-  
-  agegroups &lt;- c(&quot;0-4&quot;, &quot;5-9&quot;, &quot;10-14&quot;, &quot;15-19&quot;, &quot;15-19&quot;, &quot;20-24&quot;, &quot;20-24&quot;, 
-                 &quot;20-24&quot;, &quot;25-29&quot;, &quot;30-34&quot;, &quot;35-39&quot;, &quot;40-44&quot;, &quot;45-49&quot;, &quot;50-54&quot;, 
-                 &quot;55-59&quot;, &quot;60-64&quot;, &quot;60-64&quot;, &quot;65-69&quot;, &quot;65-69&quot;, &quot;70-74&quot;, &quot;75-79&quot;, 
+# format and coding based on https://walkerke.github.io/2017/10/geofaceted-pyramids/
+
+  agegroups &lt;- c(&quot;0-4&quot;, &quot;5-9&quot;, &quot;10-14&quot;, &quot;15-19&quot;, &quot;15-19&quot;, &quot;20-24&quot;, &quot;20-24&quot;,
+                 &quot;20-24&quot;, &quot;25-29&quot;, &quot;30-34&quot;, &quot;35-39&quot;, &quot;40-44&quot;, &quot;45-49&quot;, &quot;50-54&quot;,
+                 &quot;55-59&quot;, &quot;60-64&quot;, &quot;60-64&quot;, &quot;65-69&quot;, &quot;65-69&quot;, &quot;70-74&quot;, &quot;75-79&quot;,
                  &quot;80-84&quot;, &quot;85+&quot;)
-  agesex &lt;- c(paste(&quot;Male&quot;, agegroups), 
+  agesex &lt;- c(paste(&quot;Male&quot;, agegroups),
               paste(&quot;Female&quot;, agegroups))
   guilford_age$group &lt;- rep(agesex, length(unique(guilford_age$NAME)))
   guilford_age$year &lt;- census_year
@@ -572,8 +572,8 @@ towns &lt;- paste0(&quot;^&quot;, c(&quot;New Haven&quot;, &quot;Guilford&quot;,
            &quot;Branford&quot;, &quot;Hamden&quot;,
            &quot;Madison&quot;,
            &quot;East Haven&quot;,
-           &quot;West Haven&quot;, 
-           &quot;North Haven&quot;, 
+           &quot;West Haven&quot;,
+           &quot;North Haven&quot;,
            &quot;Woodbridge&quot;))
 x1 &lt;- census_age_sex(census_year = 2000)</code></pre>
 <pre><code>## To install your API key for use in future sessions, run this function with `install = TRUE`.</code></pre>
@@ -601,26 +601,26 @@ age2 &lt;- guilford_age %&gt;%
   #mutate(percent = 100 * (value / summary_value)) %&gt;%
   select(year, group, value) %&gt;%
   separate(group, into = c(&quot;sex&quot;, &quot;age&quot;), sep = &quot; &quot;) %&gt;%
-  mutate(age = factor(age, levels = unique(age)), 
-         n = ifelse(sex == &quot;Female&quot;, value, -value)) 
+  mutate(age = factor(age, levels = unique(age)),
+         n = ifelse(sex == &quot;Female&quot;, value, -value))
 
-xlabs = c(&quot;0-4&quot; = &quot;0-4&quot;, &quot;5-9&quot; = &quot;&quot;, &quot;10-14&quot; = &quot;&quot;, &quot;15-19&quot; = &quot;&quot;, &quot;20-24&quot; = &quot;&quot;, 
-          &quot;25-29&quot; = &quot;&quot;, &quot;30-34&quot; = &quot;&quot;, &quot;35-39&quot; = &quot;&quot;, &quot;40-44&quot; = &quot;&quot;, &quot;45-49&quot; = &quot;&quot;, 
-          &quot;50-54&quot; = &quot;&quot;, &quot;55-59&quot; = &quot;&quot;, &quot;60-64&quot; = &quot;&quot;, &quot;65-69&quot; = &quot;&quot;, &quot;70-74&quot; = &quot;&quot;, 
+xlabs = c(&quot;0-4&quot; = &quot;0-4&quot;, &quot;5-9&quot; = &quot;&quot;, &quot;10-14&quot; = &quot;&quot;, &quot;15-19&quot; = &quot;&quot;, &quot;20-24&quot; = &quot;&quot;,
+          &quot;25-29&quot; = &quot;&quot;, &quot;30-34&quot; = &quot;&quot;, &quot;35-39&quot; = &quot;&quot;, &quot;40-44&quot; = &quot;&quot;, &quot;45-49&quot; = &quot;&quot;,
+          &quot;50-54&quot; = &quot;&quot;, &quot;55-59&quot; = &quot;&quot;, &quot;60-64&quot; = &quot;&quot;, &quot;65-69&quot; = &quot;&quot;, &quot;70-74&quot; = &quot;&quot;,
           &quot;75-79&quot; = &quot;&quot;, &quot;80-84&quot; = &quot;&quot;, &quot;85+&quot; = &quot;85+&quot;)
 xlabs2 &lt;- c(&quot;0-4&quot;, &quot;5-9&quot;, &quot;10-14&quot;, &quot;15-19&quot;, &quot;20-24&quot;, &quot;25-29&quot;, &quot;30-34&quot;, &quot;35-39&quot;, &quot;40-44&quot;, &quot;45-49&quot;, &quot;50-54&quot;, &quot;55-59&quot;, &quot;60-64&quot;, &quot;65-69&quot;, &quot;70-74&quot;, &quot;75-79&quot;, &quot;80-84&quot;, &quot;85+&quot;)
 guilford_two_year &lt;- ggplot(data = age2, aes(x = age, y = n, fill = sex)) +
-  geom_bar(stat = &quot;identity&quot;, width = 1) + 
-  scale_y_continuous(breaks=c(-1000, -500, 0, 500, 1000),labels=c(&quot;1,000&quot;, &quot;500&quot;, &quot;0&quot;, &quot;500&quot;, &quot;1,000&quot;)) + 
-  coord_flip() + 
-  theme_minimal(base_family = &quot;Tahoma&quot;) + 
-  scale_x_discrete(labels = xlabs2) + 
-  scale_fill_manual(values = c(&quot;red&quot;, &quot;navy&quot;)) + 
-  # theme(panel.grid.major = element_blank(), 
+  geom_bar(stat = &quot;identity&quot;, width = 1) +
+  scale_y_continuous(breaks=c(-1000, -500, 0, 500, 1000),labels=c(&quot;1,000&quot;, &quot;500&quot;, &quot;0&quot;, &quot;500&quot;, &quot;1,000&quot;)) +
+  coord_flip() +
+  theme_minimal(base_family = &quot;Tahoma&quot;) +
+  scale_x_discrete(labels = xlabs2) +
+  scale_fill_manual(values = c(&quot;red&quot;, &quot;navy&quot;)) +
+  # theme(panel.grid.major = element_blank(),
   #       panel.grid.minor = element_blank(),
-  #       strip.text.x = element_text(size = 6)) + 
-  labs(x = &quot;&quot;, y = &quot;&quot;, fill = &quot;&quot;, 
-       title = &quot;Demographic Structure of Guilford -- 2000 and 2010&quot;, 
+  #       strip.text.x = element_text(size = 6)) +
+  labs(x = &quot;&quot;, y = &quot;&quot;, fill = &quot;&quot;,
+       title = &quot;Demographic Structure of Guilford -- 2000 and 2010&quot;,
        caption = paste(&quot;Data source:&quot;, &quot;US Census, tidycensus R package.&quot;)) +
   facet_wrap(~ year)
 print(guilford_two_year)</code></pre>
@@ -657,8 +657,8 @@ Note the post-secondary student age bulges for New Haven, Hamden, and West Haven
 their college populations (Yale, Quinnipiac, and University of New Haven).</p>
 <pre class="r"><code>age &lt;- all_towns %&gt;% rename(town = NAME) %&gt;%
   mutate(town = str_replace(str_replace(town, &quot; town, New Haven County, Connecticut&quot;, &quot;&quot;), &quot; town&quot;, &quot;&quot;),
-         town = factor(town, levels = c(&quot;Woodbridge&quot;, &quot;Hamden&quot;, &quot;North Haven&quot;, 
-                                        &quot;West Haven&quot;, &quot;New Haven&quot;, &quot;East Haven&quot;, 
+         town = factor(town, levels = c(&quot;Woodbridge&quot;, &quot;Hamden&quot;, &quot;North Haven&quot;,
+                                        &quot;West Haven&quot;, &quot;New Haven&quot;, &quot;East Haven&quot;,
                                         &quot;Branford&quot;, &quot;Guilford&quot;, &quot;Madison&quot;))) %&gt;%
   group_by(town, group) %&gt;%
   mutate(value = sum(value)) %&gt;%
@@ -667,46 +667,46 @@ their college populations (Yale, Quinnipiac, and University of New Haven).</p>
   mutate(percent = 100 * (value / summary_value)) %&gt;%
   select(town, group, value, percent) %&gt;%
   separate(group, into = c(&quot;sex&quot;, &quot;age&quot;), sep = &quot; &quot;) %&gt;%
-  mutate(age = factor(age, levels = unique(age)), 
+  mutate(age = factor(age, levels = unique(age)),
          n = ifelse(sex == &quot;Female&quot;, value, -value),
-         pct = ifelse(sex == &quot;Female&quot;, percent, -percent)) 
+         pct = ifelse(sex == &quot;Female&quot;, percent, -percent))
 
-xlabs = c(&quot;0-4&quot; = &quot;0-4&quot;, &quot;5-9&quot; = &quot;&quot;, &quot;10-14&quot; = &quot;&quot;, &quot;15-19&quot; = &quot;&quot;, &quot;20-24&quot; = &quot;&quot;, 
-          &quot;25-29&quot; = &quot;&quot;, &quot;30-34&quot; = &quot;&quot;, &quot;35-39&quot; = &quot;&quot;, &quot;40-44&quot; = &quot;&quot;, &quot;45-49&quot; = &quot;&quot;, 
-          &quot;50-54&quot; = &quot;&quot;, &quot;55-59&quot; = &quot;&quot;, &quot;60-64&quot; = &quot;&quot;, &quot;65-69&quot; = &quot;&quot;, &quot;70-74&quot; = &quot;&quot;, 
+xlabs = c(&quot;0-4&quot; = &quot;0-4&quot;, &quot;5-9&quot; = &quot;&quot;, &quot;10-14&quot; = &quot;&quot;, &quot;15-19&quot; = &quot;&quot;, &quot;20-24&quot; = &quot;&quot;,
+          &quot;25-29&quot; = &quot;&quot;, &quot;30-34&quot; = &quot;&quot;, &quot;35-39&quot; = &quot;&quot;, &quot;40-44&quot; = &quot;&quot;, &quot;45-49&quot; = &quot;&quot;,
+          &quot;50-54&quot; = &quot;&quot;, &quot;55-59&quot; = &quot;&quot;, &quot;60-64&quot; = &quot;&quot;, &quot;65-69&quot; = &quot;&quot;, &quot;70-74&quot; = &quot;&quot;,
           &quot;75-79&quot; = &quot;&quot;, &quot;80-84&quot; = &quot;&quot;, &quot;85+&quot; = &quot;85+&quot;)
 # xlabs2 &lt;- c(&quot;0-4&quot;, &quot;5-9&quot;, &quot;10-14&quot;, &quot;15-19&quot;, &quot;20-24&quot;, &quot;25-29&quot;, &quot;30-34&quot;, &quot;35-39&quot;, &quot;40-44&quot;, &quot;45-49&quot;, &quot;50-54&quot;, &quot;55-59&quot;, &quot;60-64&quot;, &quot;65-69&quot;, &quot;70-74&quot;, &quot;75-79&quot;, &quot;80-84&quot;, &quot;85+&quot;)
 xlabs2 &lt;- c(&quot;0-4&quot;, &quot;&quot;, &quot;10-14&quot;, &quot;&quot;, &quot;20-24&quot;, &quot;&quot;, &quot;30-34&quot;, &quot;&quot;, &quot;40-44&quot;, &quot;&quot;, &quot;50-54&quot;, &quot;&quot;, &quot;60-64&quot;, &quot;&quot;, &quot;70-74&quot;, &quot;&quot;, &quot;&quot;, &quot;85+&quot;)
 town_pyramids_pop &lt;- ggplot(data = age, aes(x = age, y = n, fill = sex)) +
-  geom_bar(stat = &quot;identity&quot;, width = 1) + 
-  scale_y_continuous(breaks=c(-6000, -5000, -4000, -3000, -2000, -1000, 0, 
+  geom_bar(stat = &quot;identity&quot;, width = 1) +
+  scale_y_continuous(breaks=c(-6000, -5000, -4000, -3000, -2000, -1000, 0,
                               1000, 2000, 3000, 4000, 5000, 6000),
-                     labels=c(&quot;&quot;, &quot;5K&quot;, &quot;&quot;, &quot;&quot;, &quot;2K&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;2K&quot;, &quot;&quot;, &quot;&quot;, &quot;5K&quot;, &quot;&quot;)) + 
-  coord_flip() + 
-  theme_minimal(base_family = &quot;Tahoma&quot;) + 
-  scale_x_discrete(labels = xlabs2) + 
-  scale_fill_manual(values = c(&quot;red&quot;, &quot;navy&quot;)) + 
-  # theme(panel.grid.major = element_blank(), 
+                     labels=c(&quot;&quot;, &quot;5K&quot;, &quot;&quot;, &quot;&quot;, &quot;2K&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;2K&quot;, &quot;&quot;, &quot;&quot;, &quot;5K&quot;, &quot;&quot;)) +
+  coord_flip() +
+  theme_minimal(base_family = &quot;Tahoma&quot;) +
+  scale_x_discrete(labels = xlabs2) +
+  scale_fill_manual(values = c(&quot;red&quot;, &quot;navy&quot;)) +
+  # theme(panel.grid.major = element_blank(),
   #       panel.grid.minor = element_blank(),
-  #       strip.text.x = element_text(size = 6)) + 
-  labs(x = &quot;&quot;, y = &quot;&quot;, fill = &quot;&quot;, 
-       title = &quot;Demographic Structure Area Towns - Population by Age 2010&quot;, 
+  #       strip.text.x = element_text(size = 6)) +
+  labs(x = &quot;&quot;, y = &quot;&quot;, fill = &quot;&quot;,
+       title = &quot;Demographic Structure Area Towns - Population by Age 2010&quot;,
        caption = paste(&quot;Data source:&quot;, &quot;US Census, tidycensus R package.&quot;)) +
   facet_wrap(~ town)
 print(town_pyramids_pop)</code></pre>
 <p><img src="/blog/2018-08-16-geotagging-voter-registrations_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <pre class="r"><code>town_pyramids_pct &lt;- ggplot(data = age, aes(x = age, y = pct, fill = sex)) +
-  geom_bar(stat = &quot;identity&quot;, width = 1) + 
-  scale_y_continuous(breaks=c(-6, -4, -2,  0, 2, 4, 6),labels=c(&quot;&quot;, &quot;4%&quot;, &quot;2%&quot;,&quot;0&quot;, &quot;2%&quot;, &quot;4%&quot;, &quot;&quot;)) + 
-  coord_flip() + 
-  theme_minimal(base_family = &quot;Tahoma&quot;) + 
-  scale_x_discrete(labels = xlabs2) + 
-  scale_fill_manual(values = c(&quot;red&quot;, &quot;navy&quot;)) + 
-  # theme(panel.grid.major = element_blank(), 
+  geom_bar(stat = &quot;identity&quot;, width = 1) +
+  scale_y_continuous(breaks=c(-6, -4, -2,  0, 2, 4, 6),labels=c(&quot;&quot;, &quot;4%&quot;, &quot;2%&quot;,&quot;0&quot;, &quot;2%&quot;, &quot;4%&quot;, &quot;&quot;)) +
+  coord_flip() +
+  theme_minimal(base_family = &quot;Tahoma&quot;) +
+  scale_x_discrete(labels = xlabs2) +
+  scale_fill_manual(values = c(&quot;red&quot;, &quot;navy&quot;)) +
+  # theme(panel.grid.major = element_blank(),
   #       panel.grid.minor = element_blank(),
-  #       strip.text.x = element_text(size = 6)) + 
-  labs(x = &quot;&quot;, y = &quot;&quot;, fill = &quot;&quot;, 
-       title = &quot;Demographic Structure Area Towns - Percent by Age 2010&quot;, 
+  #       strip.text.x = element_text(size = 6)) +
+  labs(x = &quot;&quot;, y = &quot;&quot;, fill = &quot;&quot;,
+       title = &quot;Demographic Structure Area Towns - Percent by Age 2010&quot;,
        caption = paste(&quot;Data source:&quot;, &quot;US Census, tidycensus R package.&quot;)) +
   facet_wrap(~ town)
 print(town_pyramids_pct)</code></pre>
@@ -868,15 +868,15 @@ by_place_party &lt;- regs_age %&gt;%
   group_by(poll_place, Party) %&gt;% tally() %&gt;%
   left_join(by_place) %&gt;% mutate(pct = (n / subtotal) * 100)</code></pre>
 <pre><code>## Joining, by = &quot;poll_place&quot;</code></pre>
-<pre class="r"><code>place_summary &lt;- by_place_party %&gt;% group_by(poll_place) %&gt;% 
-  select(poll_place, Party, pct) %&gt;% 
+<pre class="r"><code>place_summary &lt;- by_place_party %&gt;% group_by(poll_place) %&gt;%
+  select(poll_place, Party, pct) %&gt;%
   spread(key = Party, value = pct) %&gt;%
   mutate(summary = sprintf(&quot;D:%2.f%% R:%2.f%% U:%2.f%%&quot;, Democratic, Republican, Unaffiliated)) %&gt;%
   left_join(poll_loc) %&gt;% left_join(by_place)</code></pre>
 <pre><code>## Joining, by = &quot;poll_place&quot;
 ## Joining, by = &quot;poll_place&quot;</code></pre>
-<pre class="r"><code>kable(place_summary %&gt;% select(`Polling Place` = poll_place,  n = subtotal, summary), 
-      format.args = list(big.mark = &quot;,&quot;), 
+<pre class="r"><code>kable(place_summary %&gt;% select(`Polling Place` = poll_place,  n = subtotal, summary),
+      format.args = list(big.mark = &quot;,&quot;),
       caption = &quot;Guilford Voter Registratins by Polling Place&quot;)</code></pre>
 <table>
 <caption>(#tab:polling_place)Guilford Voter Registratins by Polling Place</caption>
@@ -938,14 +938,14 @@ guilford_base &lt;- ggmap(get_map(location = guilford_boundaries, zoom = 11,
 <pre><code>## Source : http://tile.stamen.com/terrain/11/610/766.png</code></pre>
 <pre class="r"><code>regs_loc &lt;- regs_age %&gt;%
   left_join(google_addr %&gt;% select(lat, lon, addresses = in_address)) %&gt;%
-  filter(!is.na(lat), !is.na(lon), 
+  filter(!is.na(lat), !is.na(lon),
          lat &lt;= guilford_right_top_lat, lat &gt;= guilford_left_bottom_lat,
          lon &lt;= guilford_right_top_lon, lon &gt;= guilford_left_bottom_lon)</code></pre>
 <pre><code>## Joining, by = &quot;addresses&quot;</code></pre>
-<pre class="r"><code>p &lt;- guilford_base + 
-  geom_point(data = regs_loc %&gt;% 
+<pre class="r"><code>p &lt;- guilford_base +
+  geom_point(data = regs_loc %&gt;%
                filter(Party %in% c(&quot;Democratic&quot;, &quot;Republican&quot;, &quot;Unaffiliated&quot;)) %&gt;%
-                      sample_frac(size = 0.5), 
+                      sample_frac(size = 0.5),
                       aes(x = lon, y = lat, color = Party), size = 0.1) +
                facet_wrap(~ Party) +
                xlim(c(guilford_left_bottom_lon, guilford_right_top_lon)) +
@@ -1009,14 +1009,14 @@ get into these issues. See <a href="http://geoservices.tamu.edu">Texas A&amp;M G
 I think you can submit batch files of addresses to them as an alternative to using something
 like the <code>geocode</code> function in <code>ggmap</code>. Out of personal interest, I decided to evaluate
 my geocodes by directly comparing the results based on Google and on the Data Science Toolkit.</p>
-<pre class="r"><code>p_dsk_google &lt;- google_dsk_map &lt;- guilford_base + 
-  geom_point(data = google_addr , 
+<pre class="r"><code>p_dsk_google &lt;- google_dsk_map &lt;- guilford_base +
+  geom_point(data = google_addr ,
              aes(x = lon, y = lat), size = 0.1, colour = &quot;red&quot;) +
-  geom_point(data = dsk_addr, 
+  geom_point(data = dsk_addr,
              aes(x = lon, y = lat), size = 0.1, colour = &quot;blue&quot;) +
   xlim(c(guilford_left_bottom_lon, guilford_right_top_lon)) +
   ylim(c(guilford_left_bottom_lat, 41.34)) + # guilford_right_top_lat
-  ggtitle(&quot;Comparison of Data Science Toolkit (blue) and Google (red)&quot;) + 
+  ggtitle(&quot;Comparison of Data Science Toolkit (blue) and Google (red)&quot;) +
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
         axis.text.y = element_blank(), axis.ticks.y = element_blank(),
         axis.line = element_blank()) + theme(legend.position=&quot;none&quot;) +
@@ -1057,14 +1057,14 @@ home_base &lt;- ggmap(get_map(location = detail_boundaries, zoom = 15,
 <pre><code>## Source : http://tile.stamen.com/terrain/15/9765/12253.png</code></pre>
 <pre><code>## Source : http://tile.stamen.com/terrain/15/9766/12253.png</code></pre>
 <pre><code>## Source : http://tile.stamen.com/terrain/15/9767/12253.png</code></pre>
-<pre class="r"><code>p_myhome &lt;- home_base + 
-  geom_point(data = google_addr, 
+<pre class="r"><code>p_myhome &lt;- home_base +
+  geom_point(data = google_addr,
              aes(x = lon, y = lat), size = 1, colour = &quot;red&quot;) +
-  geom_point(data = dsk_addr, 
+  geom_point(data = dsk_addr,
              aes(x = lon, y = lat), size = 1, colour = &quot;blue&quot;) +
   xlim(c(detail_left_bottom_lon, detail_right_top_lon)) +
   ylim(c(detail_left_bottom_lat, detail_right_top_lat)) +
-    ggtitle(&quot;Local Detail of Data Science Toolkit (blue) and Google (red)&quot;) + 
+    ggtitle(&quot;Local Detail of Data Science Toolkit (blue) and Google (red)&quot;) +
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
         axis.text.y = element_blank(), axis.ticks.y = element_blank(),
         axis.line = element_blank()) + theme(legend.position=&quot;none&quot;) +
@@ -1102,14 +1102,14 @@ home_base &lt;- ggmap(get_map(location = detail_boundaries, zoom = 15,
 <pre><code>## Source : http://tile.stamen.com/terrain/15/9769/12247.png</code></pre>
 <pre><code>## Source : http://tile.stamen.com/terrain/15/9768/12248.png</code></pre>
 <pre><code>## Source : http://tile.stamen.com/terrain/15/9769/12248.png</code></pre>
-<pre class="r"><code>p_example &lt;- home_base + 
-  geom_point(data = google_addr, 
+<pre class="r"><code>p_example &lt;- home_base +
+  geom_point(data = google_addr,
              aes(x = lon, y = lat), size = 1, colour = &quot;red&quot;) +
-  geom_point(data = dsk_addr, 
+  geom_point(data = dsk_addr,
              aes(x = lon, y = lat), size = 1, colour = &quot;blue&quot;) +
   xlim(c(detail_left_bottom_lon, detail_right_top_lon)) +
   ylim(c(detail_left_bottom_lat, detail_right_top_lat)) +
-    ggtitle(&quot;Another Local Example of Data Science Toolkit (blue) and Google (red)&quot;) + 
+    ggtitle(&quot;Another Local Example of Data Science Toolkit (blue) and Google (red)&quot;) +
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
         axis.text.y = element_blank(), axis.ticks.y = element_blank(),
         axis.line = element_blank()) + theme(legend.position=&quot;none&quot;) +
@@ -1162,7 +1162,7 @@ wrap_geocode_single &lt;- function(an_address, an_id, src2 = &quot;dsk&quot;) {
       geo_rc &lt;- 1
       result$lon[1] &lt;- geo_result$lon[1]
       result$lat[1] &lt;- geo_result$lat[1]
-      result$out_address[1] &lt;- as.character(geo_result$address[1])  
+      result$out_address[1] &lt;- as.character(geo_result$address[1])
       result$id[1] &lt;- an_id
       result$in_address[1] &lt;- an_address
       result$rc[1] &lt;- &quot;OK&quot;

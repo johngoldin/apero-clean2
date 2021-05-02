@@ -15,7 +15,7 @@ excerpt: 'A description of the demographic structure of Guilford by age compared
 keywords: []
 ---
 
-The [previous entry](/post/geotagging_voters/) was an exercise in using R
+The [previous entry](/blog/geotagging-voters/) was an exercise in using R
 to process some data about voter registrations and the US Census related to Guilford. Because
 it was focused on the R code, it's very difficult to see the actual results. I
 decided to do this post to highlight some interesting charts about Guilford

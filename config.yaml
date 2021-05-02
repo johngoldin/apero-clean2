@@ -40,7 +40,7 @@ params:
   # for more http://tachyons.io/docs/typography/font-family/
   textFontFamily: "Calisto"
   headingFontFamily: "Avenir"
-  description: A modern, beautiful, and easily configurable blog theme for Hugo.
+  description:
   favicon: /img/for_site/gargoyle.iconset
   logo: /img/for_site/gargoyle_transparent.png
   mainSections:
