@@ -5,7 +5,8 @@ languageCode: en
 title: Can I Blog Too
 author: John Goldin
 copyright: ''
-googleAnalytics: "UA-92008736-2"
+# googleAnalytics: "UA-92008736-2"
+googleAnalytics:
 disqusShortname: ''
 metaDataFormat: yaml
 footnoteReturnLinkContents: '&#8617;'
