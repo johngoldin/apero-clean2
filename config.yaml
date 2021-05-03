@@ -1,5 +1,5 @@
+baseURL: https://www.johngoldin.com/
 baseURL: /
-# baseURL: "https://johngoldin.com/"
 theme: hugo-apero
 languageCode: en
 title: Can I Blog Too
